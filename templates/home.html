@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Digital Library</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h1>Welcome to the Digital Library</h1>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+    {% for msg in messages %}
+    <li style="color: green;">{{ msg }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+<form method="GET" action="/">
+    <label for="search">Search books:</label>
+    <input type="text" name="search" id="search" value="{{ request.args.get('search', '') }}">
+    <button type="submit">Search</button>
+
+    <br><br>
+
+    <label for="sort">Sort by:</label>
+    <select name="sort" id="sort">
+        <option value="">-- Select --</option>
+        <option value="title" {% if request.args.get(
+        'sort') == 'title' %}selected{% endif %}>Title</option>
+        <option value="author" {% if request.args.get(
+        'sort') == 'author' %}selected{% endif %}>Author</option>
+    </select>
+    <button type="submit">Apply</button>
+</form>
+
+<hr>
+
+{% if books %}
+<ul>
+    {% for book in books %}
+    <li class="book-card">
+        <strong>{{ book.title }}</strong> by {{ book.author.name }}<br>
+        ISBN: {{ book.isbn }} | Year: {{ book.publication_year }}
+
+        <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST" style="display:inline;">
+            <button type="submit">Delete Book</button>
+        </form>
+    </li>
+    <br>
+    {% endfor %}
+</ul>
+{% else %}
+<p style="color: red;">No books found.</p>
+{% endif %}
+
+<hr>
+
+<a href="/add_author">➕ Add Author</a> |
+<a href="/add_book">➕ Add Book</a>
+</body>
+</html>
