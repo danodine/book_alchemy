@@ -26,11 +26,13 @@ class Author(db.Model):
     birth_date = db.Column(db.String)
     date_of_death = db.Column(db.String)
 
+
     def __repr__(self):
         """
         String representation for debugging.
         """
         return f'<Author {self.name}>'
+
 
     def __str__(self):
         """
@@ -59,11 +61,13 @@ class Book(db.Model):
 
     author = db.relationship('Author', backref=db.backref('books', lazy=True))
 
+
     def __repr__(self):
         """
         String representation for debugging.
         """
         return f'<Book {self.title}>'
+
 
     def __str__(self):
         """

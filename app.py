@@ -11,7 +11,6 @@ The app uses SQLite and SQLAlchemy for data persistence.
 
 import os
 from flask import Flask, request, render_template, redirect, url_for, flash
-from flask_sqlalchemy import SQLAlchemy
 from data_models import db, Author, Book
 
 app = Flask(__name__)
@@ -27,6 +26,7 @@ db.init_app(app)
 # Uncomment to create tables on first run
 # with app.app_context():
 #     db.create_all()
+
 
 @app.route('/')
 def home():
@@ -56,6 +56,7 @@ def home():
     books = query.all()
     return render_template("home.html", books=books)
 
+
 @app.route('/add_author', methods=['GET', 'POST'])
 def add_author():
     """
@@ -77,6 +78,7 @@ def add_author():
         db.session.commit()
         message = 'Author added successfully!'
     return render_template("add_author.html", message=message)
+
 
 @app.route('/add_book', methods=['GET', 'POST'])
 def add_book():
@@ -106,6 +108,7 @@ def add_book():
         db.session.commit()
         message = 'Book added successfully!'
     return render_template("add_book.html", authors=authors, message=message)
+
 
 @app.route('/book/<int:book_id>/delete', methods=['POST'])
 def delete_book(book_id):
